@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "yesblock",
+	"version": "${version}",
+	"name": "YesBlock",
+	"description": "Simple hypixel skyblock mod :)",
+	"authors": [
+		"YesseYYesseY"
+	],
+	"license": "",
+	"icon": "assets/yesblock/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"yesseyyessey.yesblock.YesBlock"
+		],
+		"client": [
+			"yesseyyessey.yesblock.YesBlockClient"
+		]
+	},
+	"mixins": [
+		"yesblock.mixins.json",
+		{
+			"config": "yesblock.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.6",
+		"java": ">=21",
+		"fabric-api": "*",
+		"bobby": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
