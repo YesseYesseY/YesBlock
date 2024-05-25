@@ -14,7 +14,7 @@ public enum SkyblockTier {
     UNOBTAINABLE;
 
     public Formatting getFormatting() {
-        if (this == SkyblockTier.COMMON) return Formatting.GRAY;
+        if (this == SkyblockTier.COMMON) return Formatting.WHITE;
         if (this == SkyblockTier.UNCOMMON) return Formatting.GREEN;
         return Formatting.WHITE;
     }
