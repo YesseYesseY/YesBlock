@@ -29,6 +29,7 @@ public class YesBlockClient implements ClientModInitializer {
 
 	public static boolean SaveChunksOnHypixel = false; // Skyblock maps get weird only set to true when you're carefully recording chunks
 	public static boolean FullGamma = false;
+	public static int CurrentItemPage = 0;
 
 	public static List<SkyblockItem> SBItems = new ArrayList<SkyblockItem>();
 
