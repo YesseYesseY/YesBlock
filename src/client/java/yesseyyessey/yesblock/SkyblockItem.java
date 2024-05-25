@@ -4,13 +4,18 @@ import com.google.gson.JsonObject;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.DyedColorComponent;
+import net.minecraft.component.type.LoreComponent;
 import net.minecraft.component.type.ProfileComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class SkyblockItem {
@@ -67,6 +72,7 @@ public class SkyblockItem {
         _itemStack = new ItemStack(SkyblockMaterial.getMaterialItem(Material, Durability));
         _itemStack.set(DataComponentTypes.RARITY, Rarity.COMMON);
         _itemStack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, Glowing);
+        _itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, new AttributeModifiersComponent(new ArrayList<AttributeModifiersComponent.Entry>(), false));
         if (json.has("skin"))
         {
             PropertyMap properties = new PropertyMap();
@@ -85,6 +91,10 @@ public class SkyblockItem {
         MutableText stackName = Text.empty().append(Text.literal(Name).formatted(Tier.getFormatting()));
         _itemStack.set(DataComponentTypes.ITEM_NAME, stackName);
         // TODO: add other stuffs
+        ArrayList<Text> lore = new ArrayList<>();
+
+        lore.add(Text.literal(Tier.name()).setStyle(Style.EMPTY.withItalic(false)).formatted(Formatting.BOLD).formatted(Tier.getFormatting()));
+        _itemStack.set(DataComponentTypes.LORE, new LoreComponent(lore));
     }
 
     public ItemStack toItemStack() {
