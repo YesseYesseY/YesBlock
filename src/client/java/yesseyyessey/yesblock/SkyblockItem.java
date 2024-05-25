@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.component.type.ProfileComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
@@ -71,6 +72,14 @@ public class SkyblockItem {
             PropertyMap properties = new PropertyMap();
             properties.put("textures", new Property("textures", json.get("skin").getAsString()));
             _itemStack.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.empty(), Optional.empty(), properties));
+        }
+
+        if (json.has("color")) {
+            String color_raw = json.get("color").getAsString(); // 255,255,255
+            String[] values = color_raw.split(",");
+            int color = (Integer.parseInt(values[0]) << 16) | (Integer.parseInt(values[1]) << 8) | Integer.parseInt(values[2]);
+
+            _itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(color, false));
         }
 
         MutableText stackName = Text.empty().append(Text.literal(Name).formatted(Tier.getFormatting()));
