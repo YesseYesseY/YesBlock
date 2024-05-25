@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "BobbyMixin",
-    "GammaMixin"
+    "GammaMixin",
+    "OptionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

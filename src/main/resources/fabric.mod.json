@@ -7,7 +7,7 @@
 	"authors": [
 		"YesseYYesseY"
 	],
-	"license": "",
+	"license": "MIT",
 	"icon": "assets/yesblock/icon.png",
 	"environment": "*",
 	"entrypoints": {
