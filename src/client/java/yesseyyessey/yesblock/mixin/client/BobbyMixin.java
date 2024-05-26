@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 
 import static de.johni0702.minecraft.bobby.ChunkSerializer.fingerprint;
 
-// TODO: Make bobby optional
 @Mixin(FakeChunkManager.class)
 public class BobbyMixin {
     private static boolean IsOnHypixel = false;

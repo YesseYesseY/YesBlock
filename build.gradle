@@ -43,10 +43,11 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "maven.modrinth:bobby:5.2.0+mc1.20.6"
+	modCompileOnly "maven.modrinth:bobby:5.2.0+mc1.20.6"
+	modRuntimeOnly "maven.modrinth:modmenu:10.0.0-beta.1"
 
-	modImplementation "org.spongepowered:configurate-core:4.1.2"
-	modImplementation "org.spongepowered:configurate-hocon:4.1.2"
+	modCompileOnly "org.spongepowered:configurate-core:4.1.2"
+	modCompileOnly "org.spongepowered:configurate-hocon:4.1.2"
 }
 
 processResources {

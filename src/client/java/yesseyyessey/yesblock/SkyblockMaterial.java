@@ -73,7 +73,7 @@ public class SkyblockMaterial {
             case "WOOD_STAIRS" -> { return Items.OAK_STAIRS; }
             case "POTATO_ITEM" -> { return Items.POTATO; }
             case "REDSTONE_TORCH_ON" -> { return Items.REDSTONE_TORCH; }
-            case "BED" -> { return Items.RED_BED; } // TODO: Check this
+            case "BED" -> { return Items.RED_BED; }
             case "EMPTY_MAP" -> { return Items.MAP; }
             case "GRASS" -> { return Items.GRASS_BLOCK; }
             case "SPECKLED_MELON" -> { return Items.GLISTERING_MELON_SLICE; }
@@ -307,7 +307,18 @@ public class SkyblockMaterial {
             }
 
             case "MONSTER_EGG" -> {
-                return Items.GHAST_SPAWN_EGG; // TODO: Add styles, Example: durability 120 on INFLATABLE_JERRY
+                switch (durability) {
+                    case 0 -> { return Items.POLAR_BEAR_SPAWN_EGG; }
+                    case 52 -> { return Items.SPIDER_SPAWN_EGG; }
+                    case 54 -> { return Items.ZOMBIE_SPAWN_EGG; }
+                    case 58 -> { return Items.ENDERMAN_SPAWN_EGG; }
+                    case 67 -> { return Items.ENDERMITE_SPAWN_EGG; }
+                    case 94 -> { return Items.SQUID_SPAWN_EGG; }
+                    case 96 -> { return Items.MOOSHROOM_SPAWN_EGG; }
+                    case 101 -> { return Items.RABBIT_SPAWN_EGG; }
+                    case 120 -> { return Items.VILLAGER_SPAWN_EGG; }
+
+                }
             }
         }
 
