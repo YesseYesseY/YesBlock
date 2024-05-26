@@ -14,7 +14,7 @@ import yesseyyessey.yesblock.SkyblockItem;
 import yesseyyessey.yesblock.YesBlockClient;
 
 @Mixin(HandledScreen.class)
-public class HandledScreenMixin extends Screen {
+public abstract class HandledScreenMixin extends Screen {
     protected HandledScreenMixin(Text title) {
         super(title);
     }
@@ -25,20 +25,25 @@ public class HandledScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo ci) {
+        int buttonSize = (ItemListWidth * 16) / 2;
+
         ButtonWidget prevButton = ButtonWidget.builder(Text.literal("Prev Page"), button -> {
             if (YesBlockClient.CurrentItemPage > 0) {
                 YesBlockClient.CurrentItemPage--;
             }
-        }).width((ItemListWidth * 16) / 2).build();
-        prevButton.setY(ItemListHeight*16);
+        }).width(buttonSize).build();
 
         ButtonWidget nextButton = ButtonWidget.builder(Text.literal("Next Page"), button -> {
             if (YesBlockClient.CurrentItemPage < YesBlockClient.SBItems.size() / ItemListTotalSize) {
                 YesBlockClient.CurrentItemPage++;
             }
-        }).width((ItemListWidth * 16) / 2).build();
+        }).width(buttonSize).build();
+
+        prevButton.setY(ItemListHeight*16);
+        prevButton.setX(width - (buttonSize * 2));
+
         nextButton.setY(ItemListHeight*16);
-        nextButton.setX((ItemListWidth * 16) / 2);
+        nextButton.setX(width - buttonSize);
 
         addDrawableChild(prevButton);
         addDrawableChild(nextButton);
@@ -52,11 +57,11 @@ public class HandledScreenMixin extends Screen {
             int index = i + (YesBlockClient.CurrentItemPage * ItemListTotalSize);
             if (index < YesBlockClient.SBItems.size()) {
                 SkyblockItem item = YesBlockClient.SBItems.get(index);
-                context.drawItem(item.toItemStack(), (i % ItemListWidth) * 16, i / ItemListWidth * 16);
+                context.drawItem(item.toItemStack(), ((i % ItemListWidth) * 16) + (width - (ItemListWidth * 16)), i / ItemListWidth * 16);
             }
         }
 
-        if (mouseX < ItemListWidth * 16 && mouseY < ItemListHeight * 16) {
+        if (mouseX > width - (ItemListWidth * 16) && mouseY < ItemListHeight * 16) {
             SkyblockItem item = getItemFromMouse(mouseX, mouseY);
             if (item != null) {
                 context.drawItemTooltip(this.textRenderer, item.toItemStack(), mouseX, mouseY);
@@ -64,12 +69,13 @@ public class HandledScreenMixin extends Screen {
         }
     }
 
+    @Unique
     private SkyblockItem getItemFromMouse(int mouseX, int mouseY) {
-        int x = mouseX / 16;
+        int x = (mouseX - (width - (ItemListWidth * 16))) / 16;
         int y = mouseY / 16;
         int z = x + (y * ItemListWidth) + (YesBlockClient.CurrentItemPage * ItemListTotalSize);
 
-        if (z < YesBlockClient.SBItems.size()) {
+        if (z < YesBlockClient.SBItems.size() && z >= 0) {
             return YesBlockClient.SBItems.get(z);
         }
 

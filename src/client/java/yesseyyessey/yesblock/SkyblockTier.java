@@ -3,22 +3,20 @@ package yesseyyessey.yesblock;
 import net.minecraft.util.Formatting;
 
 public enum SkyblockTier {
-    COMMON,
-    UNCOMMON,
-    RARE,
-    EPIC,
-    LEGENDARY,
-    MYTHIC,
-    SPECIAL,
-    VERY_SPECIAL,
-    UNOBTAINABLE;
+    COMMON(Formatting.WHITE),
+    UNCOMMON(Formatting.GREEN),
+    RARE(Formatting.BLUE),
+    EPIC(Formatting.DARK_PURPLE),
+    LEGENDARY(Formatting.GOLD),
+    MYTHIC(Formatting.LIGHT_PURPLE),
+    DIVINE(Formatting.AQUA),
+    SPECIAL(Formatting.RED),
+    VERY_SPECIAL(Formatting.RED),
+    UNOBTAINABLE(Formatting.BLACK);
 
-    public Formatting getFormatting() {
-        if (this == SkyblockTier.COMMON) return Formatting.WHITE;
-        if (this == SkyblockTier.UNCOMMON) return Formatting.GREEN;
-        if (this == SkyblockTier.RARE) return Formatting.BLUE;
-        if (this == SkyblockTier.EPIC) return Formatting.DARK_PURPLE;
-        if (this == SkyblockTier.LEGENDARY) return Formatting.GOLD;
-        return Formatting.WHITE;
+    public final Formatting formatting;
+
+    SkyblockTier(Formatting formatting) {
+        this.formatting = formatting;
     }
 }

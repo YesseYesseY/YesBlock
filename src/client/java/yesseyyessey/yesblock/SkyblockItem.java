@@ -88,12 +88,12 @@ public class SkyblockItem {
             _itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(color, false));
         }
 
-        MutableText stackName = Text.empty().append(Text.literal(Name).formatted(Tier.getFormatting()));
+        MutableText stackName = Text.empty().append(Text.literal(Name).formatted(Tier.formatting));
         _itemStack.set(DataComponentTypes.ITEM_NAME, stackName);
         // TODO: add other stuffs
         ArrayList<Text> lore = new ArrayList<>();
 
-        lore.add(Text.literal(Tier.name()).setStyle(Style.EMPTY.withItalic(false)).formatted(Formatting.BOLD).formatted(Tier.getFormatting()));
+        lore.add(Text.literal(Tier.name()).setStyle(Style.EMPTY.withItalic(false)).formatted(Formatting.BOLD).formatted(Tier.formatting));
         _itemStack.set(DataComponentTypes.LORE, new LoreComponent(lore));
     }
 
