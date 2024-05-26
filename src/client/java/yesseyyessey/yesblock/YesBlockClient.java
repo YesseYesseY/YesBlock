@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientChunkManager;
 import net.minecraft.component.Component;
 
 import java.util.ArrayList;
@@ -59,6 +60,11 @@ public class YesBlockClient implements ClientModInitializer {
 				YesBlock.LOGGER.info(component.value().toString());
 			}
 			YesBlock.LOGGER.info("---------------------------------------------------------------------------------------------");
+			return 0;
+		});
+
+		RegisterCommandSimple("yesblocktest", context -> {
+			YesBlock.LOGGER.info(SkyblockUtils.GetAreaLocation());
 			return 0;
 		});
 	}

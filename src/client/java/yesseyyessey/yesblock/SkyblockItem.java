@@ -1,5 +1,6 @@
 package yesseyyessey.yesblock;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
@@ -16,6 +17,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class SkyblockItem {
@@ -28,6 +31,37 @@ public class SkyblockItem {
     public boolean Glowing;
 
     private final ItemStack _itemStack;
+
+    private String GetOrDefault(JsonObject json, String key, String Default) {
+        if (json.has(key)) {
+            return json.get(key).getAsString();
+        }
+        return Default;
+    }
+
+    private int GetOrDefault(JsonObject json, String key, int Default) {
+        if (json.has(key)) {
+            return json.get(key).getAsInt();
+        }
+        return Default;
+    }
+
+    private boolean GetOrDefault(JsonObject json, String key, boolean Default) {
+        if (json.has(key)) {
+            return json.get(key).getAsBoolean();
+        }
+        return Default;
+    }
+
+    private final Style NoItalic = Style.EMPTY.withItalic(false);
+
+    private Text CreateStatText(String statName, String statValue, Formatting valueColor, String end ) {
+        return Text.empty().setStyle(NoItalic).append(Text.literal(statName + ": ").formatted(Formatting.GRAY).append(Text.literal("+" + statValue + end).formatted(valueColor)));
+    }
+
+    private Text CreateStatText(String statName, String statValue, Formatting valueColor) {
+        return CreateStatText(statName, statValue, valueColor, "");
+    }
 
     public SkyblockItem(JsonObject json) {
         Name = json.get("name").getAsString();
@@ -47,26 +81,9 @@ public class SkyblockItem {
             Tier = SkyblockTier.COMMON;
         }
 
-        if (json.has("durability")) {
-            Durability = json.get("durability").getAsInt();
-        }
-        else {
-            Durability = 0;
-        }
-
-        if (json.has("glowing")) {
-            Glowing = json.get("glowing").getAsBoolean();
-        }
-        else {
-            Glowing = false;
-        }
-
-        if (json.has("category")) {
-            Category = json.get("category").getAsString();
-        }
-        else {
-            Category = "";
-        }
+        Durability = GetOrDefault(json, "durability", 0);
+        Glowing = GetOrDefault(json, "glowing", false);
+        Category = GetOrDefault(json, "category", "");
 
         // Rest is for the itemstack
         _itemStack = new ItemStack(SkyblockMaterial.getMaterialItem(Material, Durability));
@@ -93,7 +110,39 @@ public class SkyblockItem {
         // TODO: add other stuffs
         ArrayList<Text> lore = new ArrayList<>();
 
-        lore.add(Text.literal(Tier.name()).setStyle(Style.EMPTY.withItalic(false)).formatted(Formatting.BOLD).formatted(Tier.formatting));
+        if (json.has("stats")) {
+            JsonObject stats = json.get("stats").getAsJsonObject();
+            Map<String, String> finalStats = new HashMap<>();
+            stats.asMap().forEach((s, jsonElement) -> {
+                finalStats.put(s.toLowerCase(), jsonElement.getAsString());
+            });
+            if (finalStats.containsKey("breaking_power")) {
+                lore.add(Text.empty().setStyle(NoItalic).append(Text.literal("Breaking Power " + finalStats.get("breaking_power")).formatted(Formatting.DARK_GRAY)));
+                lore.add(Text.empty().setStyle(NoItalic));
+            }
+            if (finalStats.containsKey("damage")) {
+                lore.add(CreateStatText("Damage", finalStats.get("damage"), Formatting.RED));
+            }
+            if (finalStats.containsKey("strength")) {
+                lore.add(CreateStatText("Strength", finalStats.get("strength"), Formatting.RED));
+            }
+            if (finalStats.containsKey("sea_creature_chance")) {
+                lore.add(CreateStatText("Sea Creature Chance", finalStats.get("sea_creature_chance"), Formatting.RED, "%"));
+            }
+            if (finalStats.containsKey("fishing_speed")) {
+                lore.add(CreateStatText("Fishing Speed", finalStats.get("fishing_speed"), Formatting.GREEN));
+            }
+            if (finalStats.containsKey("mining_speed")) {
+                lore.add(CreateStatText("Mining Speed", finalStats.get("mining_speed"), Formatting.GREEN));
+            }
+            lore.add(Text.empty().setStyle(NoItalic));
+        }
+
+        MutableText footer = Text.literal(Tier.name());
+        if (!Category.isEmpty()) {
+            footer.append(" " + Category.replace('_', ' '));
+        }
+        lore.add(footer.setStyle(NoItalic).formatted(Formatting.BOLD).formatted(Tier.formatting));
         _itemStack.set(DataComponentTypes.LORE, new LoreComponent(lore));
     }
 

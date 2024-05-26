@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import de.johni0702.minecraft.bobby.FakeChunkManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import yesseyyessey.yesblock.SkyblockUtils;
 import yesseyyessey.yesblock.YesBlockClient;
 
 import java.util.function.Supplier;
@@ -20,10 +21,18 @@ import static de.johni0702.minecraft.bobby.ChunkSerializer.fingerprint;
 public class BobbyMixin {
     @Unique private static boolean IsOnHypixel = false;
 
-    @Inject(at = @At("RETURN"), method = "getCurrentWorldOrServerName")
+    @Inject(at = @At("RETURN"), method = "getCurrentWorldOrServerName", cancellable = true)
     private static void HypixelFix(ClientPlayNetworkHandler networkHandler, CallbackInfoReturnable<String> cir) {
         // TODO: Return different name depending on location, Example: hypixel.net.mainislands, hypixel.net.deepcaverns (deep caverns are positioned differently from every other island)
         IsOnHypixel = networkHandler != null && networkHandler.getServerInfo() != null && !networkHandler.getServerInfo().isRealm() && networkHandler.getServerInfo().address.contains("hypixel.net");
+
+        // Does not work, playerlist updates too late, it just shows prev area
+        // if (IsOnHypixel) {
+        //     String areaLocation = SkyblockUtils.GetAreaLocation();
+        //     if (areaLocation != null) {
+        //         cir.setReturnValue(cir.getReturnValue() + "." + SkyblockUtils.GetAreaLocation());
+        //     }
+        // }
     }
 
     @Inject(at = @At("HEAD"), method = "save", cancellable = true)
