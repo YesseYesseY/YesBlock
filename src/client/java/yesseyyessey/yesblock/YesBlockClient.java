@@ -1,6 +1,5 @@
 package yesseyyessey.yesblock;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.Command;
@@ -31,7 +30,7 @@ public class YesBlockClient implements ClientModInitializer {
 	public static boolean FullGamma = false;
 	public static int CurrentItemPage = 0;
 
-	public static List<SkyblockItem> SBItems = new ArrayList<SkyblockItem>();
+	public static List<SkyblockItem> SBItems = new ArrayList<>();
 
 	@Override
 	public void onInitializeClient() {
@@ -39,9 +38,7 @@ public class YesBlockClient implements ClientModInitializer {
 		{
 			String res = Http.Get("https://api.hypixel.net/v2/resources/skyblock/items");
 			List<JsonElement> arr = JsonParser.parseString(res).getAsJsonObject().getAsJsonArray("items").asList();
-			arr.forEach(jsonElement -> {
-				SBItems.add(new SkyblockItem(jsonElement.getAsJsonObject()));
-			});
+			arr.forEach(jsonElement -> SBItems.add(new SkyblockItem(jsonElement.getAsJsonObject())));
 		}
 		catch (Exception e)
 		{
@@ -55,7 +52,6 @@ public class YesBlockClient implements ClientModInitializer {
 		});
 
 		RegisterCommandSimple("yesblockcomponents", context -> {
-			Gson gson = new Gson();
 			List<Component<?>> components = context.getSource().getPlayer().getMainHandStack().getComponents().stream().toList();
 			for (Component<?> component : components) {
 				YesBlock.LOGGER.info("---------------------------------------------------------------------------------------------");

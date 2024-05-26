@@ -27,7 +27,7 @@ public class SkyblockItem {
     public int Durability;
     public boolean Glowing;
 
-    private ItemStack _itemStack;
+    private final ItemStack _itemStack;
 
     public SkyblockItem(JsonObject json) {
         Name = json.get("name").getAsString();
@@ -72,7 +72,7 @@ public class SkyblockItem {
         _itemStack = new ItemStack(SkyblockMaterial.getMaterialItem(Material, Durability));
         _itemStack.set(DataComponentTypes.RARITY, Rarity.COMMON);
         _itemStack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, Glowing);
-        _itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, new AttributeModifiersComponent(new ArrayList<AttributeModifiersComponent.Entry>(), false));
+        _itemStack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, new AttributeModifiersComponent(new ArrayList<>(), false));
         if (json.has("skin"))
         {
             PropertyMap properties = new PropertyMap();

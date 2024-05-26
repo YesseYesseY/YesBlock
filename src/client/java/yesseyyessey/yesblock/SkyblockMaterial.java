@@ -128,22 +128,22 @@ public class SkyblockMaterial {
             case "STAINED_GLASS_PANE", "WOOL", "STAINED_GLASS", "CARPET", "STAINED_CLAY" -> {
                 if (material.equals("STAINED_CLAY")) thing_to_search = "TERRACOTTA";
                 switch (durability) {
-                    case 0 ->  { thing_to_search = "WHITE_" + thing_to_search; }
-                    case 1 ->  { thing_to_search = "ORANGE_" + thing_to_search; }
-                    case 2 ->  { thing_to_search = "MAGENTA_" + thing_to_search; }
-                    case 3 ->  { thing_to_search = "LIGHT_BLUE_" + thing_to_search; }
-                    case 4 ->  { thing_to_search = "YELLOW_" + thing_to_search; }
-                    case 5 ->  { thing_to_search = "LIME_" + thing_to_search; }
-                    case 6 ->  { thing_to_search = "PINK_" + thing_to_search; }
-                    case 7 ->  { thing_to_search = "GRAY_" + thing_to_search; }
-                    case 8 ->  { thing_to_search = "LIGHT_GRAY_" + thing_to_search; }
-                    case 9 ->  { thing_to_search = "CYAN_" + thing_to_search; }
-                    case 10 -> { thing_to_search = "PURPLE_" + thing_to_search; }
-                    case 11 -> { thing_to_search = "BLUE_" + thing_to_search; }
-                    case 12 -> { thing_to_search = "BROWN_" + thing_to_search; }
-                    case 13 -> { thing_to_search = "GREEN_" + thing_to_search; }
-                    case 14 -> { thing_to_search = "RED_" + thing_to_search; }
-                    case 15 -> { thing_to_search = "BLACK_" + thing_to_search; }
+                    case 0 -> thing_to_search = "WHITE_" + thing_to_search;
+                    case 1 -> thing_to_search = "ORANGE_" + thing_to_search;
+                    case 2 -> thing_to_search = "MAGENTA_" + thing_to_search;
+                    case 3 -> thing_to_search = "LIGHT_BLUE_" + thing_to_search;
+                    case 4 -> thing_to_search = "YELLOW_" + thing_to_search;
+                    case 5 -> thing_to_search = "LIME_" + thing_to_search;
+                    case 6 -> thing_to_search = "PINK_" + thing_to_search;
+                    case 7 -> thing_to_search = "GRAY_" + thing_to_search;
+                    case 8 -> thing_to_search = "LIGHT_GRAY_" + thing_to_search;
+                    case 9 -> thing_to_search = "CYAN_" + thing_to_search;
+                    case 10 -> thing_to_search = "PURPLE_" + thing_to_search;
+                    case 11 -> thing_to_search = "BLUE_" + thing_to_search;
+                    case 12 -> thing_to_search = "BROWN_" + thing_to_search;
+                    case 13 -> thing_to_search = "GREEN_" + thing_to_search;
+                    case 14 -> thing_to_search = "RED_" + thing_to_search;
+                    case 15 -> thing_to_search = "BLACK_" + thing_to_search;
                 }
             }
             case "WOOD_STEP", "WOOD", "SAPLING", "LOG", "LEAVES" -> {
@@ -154,19 +154,19 @@ public class SkyblockMaterial {
                 }
 
                 switch (durability) {
-                    case 0 -> { thing_to_search = "OAK_" + thing_to_search; }
-                    case 1 -> { thing_to_search = "SPRUCE_" + thing_to_search; }
-                    case 2 -> { thing_to_search = "BIRCH_" + thing_to_search; }
-                    case 3 -> { thing_to_search = "JUNGLE_" + thing_to_search; }
-                    case 4 -> { thing_to_search = "ACACIA_" + thing_to_search; }
-                    case 5 -> { thing_to_search = "DARK_OAK_" + thing_to_search; }
+                    case 0 -> thing_to_search = "OAK_" + thing_to_search;
+                    case 1 -> thing_to_search = "SPRUCE_" + thing_to_search;
+                    case 2 -> thing_to_search = "BIRCH_" + thing_to_search;
+                    case 3 -> thing_to_search = "JUNGLE_" + thing_to_search;
+                    case 4 -> thing_to_search = "ACACIA_" + thing_to_search;
+                    case 5 -> thing_to_search = "DARK_OAK_" + thing_to_search;
                 }
             }
             case "LOG_2", "LEAVES_2" -> { // nice.
                 thing_to_search = thing_to_search.replace("_2", "");
                 switch (durability) {
-                    case 0 -> { thing_to_search = "ACACIA_" + thing_to_search; }
-                    case 1 -> { thing_to_search = "DARK_OAK_" + thing_to_search; }
+                    case 0 -> thing_to_search = "ACACIA_" + thing_to_search;
+                    case 1 -> thing_to_search = "DARK_OAK_" + thing_to_search;
                 }
             }
             case "STONE" -> {
@@ -215,8 +215,8 @@ public class SkyblockMaterial {
             }
             case "RED_SANDSTONE", "SANDSTONE" -> {
                 switch (durability) {
-                    case 1 -> { thing_to_search = "CHISELED_" + thing_to_search; }
-                    case 2 -> { thing_to_search = "SMOOTH_" + thing_to_search; }
+                    case 1 -> thing_to_search = "CHISELED_" + thing_to_search;
+                    case 2 -> thing_to_search = "SMOOTH_" + thing_to_search;
                 }
             }
             case "RAW_FISH" -> {
