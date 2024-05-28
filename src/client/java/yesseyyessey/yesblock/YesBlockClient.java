@@ -64,7 +64,7 @@ public class YesBlockClient implements ClientModInitializer {
 		});
 
 		RegisterCommandSimple("yesblocktest", context -> {
-			YesBlock.LOGGER.info(SkyblockUtils.GetAreaLocation());
+			YesBlock.LOGGER.info(SkyblockUtils.GetAreaString());
 			return 0;
 		});
 	}
