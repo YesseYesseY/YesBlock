@@ -1,17 +1,18 @@
 package yesseyyessey.yesblock.mixin.client;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.PressableWidget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import yesseyyessey.yesblock.SkyblockItem;
-import yesseyyessey.yesblock.YesBlockClient;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import yesseyyessey.yesblock.screens.ItemListThing;
 
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin extends Screen {
@@ -19,66 +20,23 @@ public abstract class HandledScreenMixin extends Screen {
         super(title);
     }
 
-    @Unique private final int ItemListHeight = 20;
-    @Unique private final int ItemListWidth = 8;
-    @Unique private final int ItemListTotalSize = ItemListHeight * ItemListWidth;
+    @Unique ItemListThing itemList = new ItemListThing();
 
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo ci) {
-        int buttonSize = (ItemListWidth * 16) / 2;
-
-        ButtonWidget prevButton = ButtonWidget.builder(Text.literal("Prev Page"), button -> {
-            if (YesBlockClient.CurrentItemPage > 0) {
-                YesBlockClient.CurrentItemPage--;
-            }
-        }).width(buttonSize).build();
-
-        ButtonWidget nextButton = ButtonWidget.builder(Text.literal("Next Page"), button -> {
-            if (YesBlockClient.CurrentItemPage < YesBlockClient.SBItems.size() / ItemListTotalSize) {
-                YesBlockClient.CurrentItemPage++;
-            }
-        }).width(buttonSize).build();
-
-        prevButton.setY(ItemListHeight*16);
-        prevButton.setX(width - (buttonSize * 2));
-
-        nextButton.setY(ItemListHeight*16);
-        nextButton.setX(width - buttonSize);
-
-        addDrawableChild(prevButton);
-        addDrawableChild(nextButton);
+        PressableWidget[] widgets = itemList.init(width);
+        for (PressableWidget widget : widgets) {
+            addDrawableChild(widget);
+        }
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     private void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        context.drawText(this.textRenderer, Text.literal("Page: " + YesBlockClient.CurrentItemPage), ItemListWidth * 16, 1, 0xFFFFFFFF, true);
-
-        for (int i = 0; i < YesBlockClient.SBItems.size() && i < ItemListTotalSize; i++) {
-            int index = i + (YesBlockClient.CurrentItemPage * ItemListTotalSize);
-            if (index < YesBlockClient.SBItems.size()) {
-                SkyblockItem item = YesBlockClient.SBItems.get(index);
-                context.drawItem(item.toItemStack(), ((i % ItemListWidth) * 16) + (width - (ItemListWidth * 16)), i / ItemListWidth * 16);
-            }
-        }
-
-        if (mouseX > width - (ItemListWidth * 16) && mouseY < ItemListHeight * 16) {
-            SkyblockItem item = getItemFromMouse(mouseX, mouseY);
-            if (item != null) {
-                context.drawItemTooltip(this.textRenderer, item.toItemStack(), mouseX, mouseY);
-            }
-        }
+        itemList.render(context, mouseX, mouseY, delta, width, textRenderer);
     }
 
-    @Unique
-    private SkyblockItem getItemFromMouse(int mouseX, int mouseY) {
-        int x = (mouseX - (width - (ItemListWidth * 16))) / 16;
-        int y = mouseY / 16;
-        int z = x + (y * ItemListWidth) + (YesBlockClient.CurrentItemPage * ItemListTotalSize);
-
-        if (z < YesBlockClient.SBItems.size() && z >= 0) {
-            return YesBlockClient.SBItems.get(z);
-        }
-
-        return null;
+    @Inject(method = "mouseClicked", at = @At("TAIL"))
+    private void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+        itemList.mouseClicked(mouseX, mouseY, button);
     }
 }
