@@ -3,6 +3,7 @@ package yesseyyessey.yesblock.screens;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.PressableWidget;
 import net.minecraft.text.Text;
@@ -14,7 +15,13 @@ public class ItemListThing {
     private final int ItemListWidth = 8;
     private final int ItemListTotalSize = ItemListHeight * ItemListWidth;
 
-    public PressableWidget[] init(int width) {
+    private final Screen screen;
+
+    public ItemListThing(Screen screen) {
+        this.screen = screen;
+    }
+
+    public PressableWidget[] init() {
         int buttonSize = (ItemListWidth * 16) / 2;
 
         ButtonWidget prevButton = ButtonWidget.builder(Text.literal("Prev Page"), button -> {
@@ -30,10 +37,10 @@ public class ItemListThing {
         }).width(buttonSize).build();
 
         prevButton.setY(ItemListHeight*16);
-        prevButton.setX(width - (buttonSize * 2));
+        prevButton.setX(screen.width - (buttonSize * 2));
 
         nextButton.setY(ItemListHeight*16);
-        nextButton.setX(width - buttonSize);
+        nextButton.setX(screen.width - buttonSize);
 
         PressableWidget[] widgets = new PressableWidget[2];
         widgets[0] = prevButton;
@@ -41,19 +48,19 @@ public class ItemListThing {
         return widgets;
     }
 
-    public void render(DrawContext context, int mouseX, int mouseY, float delta, int width, TextRenderer textRenderer) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta, TextRenderer textRenderer) {
         context.drawText(textRenderer, Text.literal("Page: " + YesBlockClient.CurrentItemPage), ItemListWidth * 16, 1, 0xFFFFFFFF, true);
 
         for (int i = 0; i < YesBlockClient.SBItems.size() && i < ItemListTotalSize; i++) {
             int index = i + (YesBlockClient.CurrentItemPage * ItemListTotalSize);
             if (index < YesBlockClient.SBItems.size()) {
                 SkyblockItem item = YesBlockClient.SBItems.get(index);
-                context.drawItem(item.toItemStack(), ((i % ItemListWidth) * 16) + (width - (ItemListWidth * 16)), i / ItemListWidth * 16);
+                context.drawItem(item.toItemStack(), ((i % ItemListWidth) * 16) + (screen.width - (ItemListWidth * 16)), i / ItemListWidth * 16);
             }
         }
 
-        if (mouseX > width - (ItemListWidth * 16) && mouseY < ItemListHeight * 16) {
-            SkyblockItem item = getItemFromMouse(mouseX, mouseY, width);
+        if (mouseX > screen.width - (ItemListWidth * 16) && mouseY < ItemListHeight * 16) {
+            SkyblockItem item = getItemFromMouse(mouseX, mouseY, screen.width);
             if (item != null) {
                 context.drawItemTooltip(textRenderer, item.toItemStack(), mouseX, mouseY);
             }
@@ -61,11 +68,24 @@ public class ItemListThing {
     }
 
     public void mouseClicked(double mouseX, double mouseY, int button) {
-        MinecraftClient.getInstance().setScreen(new ItemListCraftingScreen());
+        if (mouseX > screen.width - (ItemListWidth * 16) && mouseY < ItemListHeight * 16) {
+            SkyblockItem item = getItemFromMouse((int) mouseX, (int) mouseY, screen.width);
+            if (item != null) {
+                MinecraftClient.getInstance().setScreen(new ItemListCraftingScreen());
+            }
+        }
+    }
+
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (MinecraftClient.getInstance().options.inventoryKey.matchesKey(keyCode, scanCode)) {
+            screen.close();
+            return true;
+        }
+        return false;
     }
 
     private SkyblockItem getItemFromMouse(int mouseX, int mouseY, int width) {
-        int x = (mouseX - (width - (ItemListWidth * 16))) / 16;
+        int x = (mouseX - (screen.width - (ItemListWidth * 16))) / 16;
         int y = mouseY / 16;
         int z = x + (y * ItemListWidth) + (YesBlockClient.CurrentItemPage * ItemListTotalSize);
 

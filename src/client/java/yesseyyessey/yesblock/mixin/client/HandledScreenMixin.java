@@ -20,11 +20,12 @@ public abstract class HandledScreenMixin extends Screen {
         super(title);
     }
 
-    @Unique ItemListThing itemList = new ItemListThing();
+    @Unique ItemListThing itemList;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo ci) {
-        PressableWidget[] widgets = itemList.init(width);
+        itemList = new ItemListThing(this);
+        PressableWidget[] widgets = itemList.init();
         for (PressableWidget widget : widgets) {
             addDrawableChild(widget);
         }
@@ -32,7 +33,7 @@ public abstract class HandledScreenMixin extends Screen {
 
     @Inject(method = "render", at = @At("TAIL"))
     private void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        itemList.render(context, mouseX, mouseY, delta, width, textRenderer);
+        itemList.render(context, mouseX, mouseY, delta, textRenderer);
     }
 
     @Inject(method = "mouseClicked", at = @At("TAIL"))
